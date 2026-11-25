@@ -1,0 +1,38 @@
+dealer_id,dealer_name,city,region,size_class
+D001,Nordline Paris Est,Paris Est,Ile-de-France,L
+D002,Nordline Paris Ouest,Paris Ouest,Ile-de-France,L
+D003,Nordline Versailles,Versailles,Ile-de-France,M
+D004,Nordline Creteil,Creteil,Ile-de-France,L
+D005,Nordline Cergy,Cergy,Ile-de-France,L
+D006,Nordline Evry,Evry,Ile-de-France,M
+D007,Nordline Saint-Denis,Saint-Denis,Ile-de-France,S
+D008,Nordline Lyon Nord,Lyon Nord,Auvergne-Rhone-Alpes,L
+D009,Nordline Lyon Sud,Lyon Sud,Auvergne-Rhone-Alpes,S
+D010,Nordline Grenoble,Grenoble,Auvergne-Rhone-Alpes,M
+D011,Nordline Clermont-Ferrand,Clermont-Ferrand,Auvergne-Rhone-Alpes,M
+D012,Nordline Annecy,Annecy,Auvergne-Rhone-Alpes,S
+D013,Nordline Marseille,Marseille,Provence-Alpes-Cote d'Azur,S
+D014,Nordline Nice,Nice,Provence-Alpes-Cote d'Azur,M
+D015,Nordline Toulon,Toulon,Provence-Alpes-Cote d'Azur,M
+D016,Nordline Aix-en-Provence,Aix-en-Provence,Provence-Alpes-Cote d'Azur,M
+D017,Nordline Toulouse,Toulouse,Occitanie,S
+D018,Nordline Montpellier,Montpellier,Occitanie,L
+D019,Nordline Nimes,Nimes,Occitanie,M
+D020,Nordline Perpignan,Perpignan,Occitanie,L
+D021,Nordline Bordeaux,Bordeaux,Nouvelle-Aquitaine,S
+D022,Nordline Bayonne,Bayonne,Nouvelle-Aquitaine,S
+D023,Nordline Limoges,Limoges,Nouvelle-Aquitaine,M
+D024,Nordline La Rochelle,La Rochelle,Nouvelle-Aquitaine,M
+D025,Nordline Lille,Lille,Hauts-de-France,M
+D026,Nordline Amiens,Amiens,Hauts-de-France,S
+D027,Nordline Valenciennes,Valenciennes,Hauts-de-France,L
+D028,Nordline Dunkerque,Dunkerque,Hauts-de-France,M
+D029,Nordline Strasbourg,Strasbourg,Grand Est,M
+D030,Nordline Metz,Metz,Grand Est,L
+D031,Nordline Nancy,Nancy,Grand Est,M
+D032,Nordline Reims,Reims,Grand Est,S
+D033,Nordline Nantes,Nantes,Ouest,S
+D034,Nordline Rennes,Rennes,Ouest,M
+D035,Nordline Angers,Angers,Ouest,S
+D036,Nordline Brest,Brest,Ouest,M
+D037,Nordline Le Mans,Le Mans,Ouest,M

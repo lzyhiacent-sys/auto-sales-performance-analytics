@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nordline France – Sales Performance Dashboard</title>
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-0: #f6f6f4; --surface-1: #ffffff; --border: #e2e2de;
+  --text-primary: #191919; --text-secondary: #666666; --grid: #ececea;
+  --series-1: #257de0; --series-2: #f47230; --series-3: #00b894;
+  --good: #0aac23; --warning: #fbb315; --critical: #dc3c3d;
+  --accent-soft: #cce3fd;
+}
+@media (prefers-color-scheme: dark) {
+  .viz-root {
+    color-scheme: dark;
+    --surface-0: #111111; --surface-1: #191919; --border: #2e2e2e;
+    --text-primary: #efefef; --text-secondary: #9c9c9c; --grid: #2a2a2a;
+    --series-1: #338ced; --series-2: #e76624; --series-3: #00a888;
+    --accent-soft: #0e3d7e;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.viz-root { background: var(--surface-0); color: var(--text-primary);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh;
+  padding: 24px clamp(12px, 3vw, 40px) 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 15px; margin: 0 0 2px; }
+.sub { color: var(--text-secondary); margin: 0 0 16px; }
+.note { color: var(--text-secondary); font-size: 12px; }
+.filters { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin: 0 0 16px; }
+.filters label { color: var(--text-secondary); font-size: 13px; }
+select { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface-1); color: var(--text-primary); }
+.grid { display: grid; gap: 16px; }
+.tiles { grid-template-columns: repeat(4, 1fr); margin-bottom: 16px; }
+@media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.two { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); margin-bottom: 16px; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+.tile .label { color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+.tile .value { font-size: 26px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.tile .ctx { color: var(--text-secondary); font-size: 12px; }
+svg text { fill: var(--text-secondary); font-size: 11px; }
+svg .axis-line { stroke: var(--border); }
+svg .gridline { stroke: var(--grid); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 6px 0 4px; font-size: 12px; color: var(--text-secondary); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; z-index: 10; min-width: 140px; }
+.tip b { display: block; margin-bottom: 4px; }
+.tip .row { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2), #table th:nth-child(3), #table td:nth-child(3) { text-align: left; }
+th { color: var(--text-secondary); font-weight: 500; font-size: 12px; cursor: pointer; user-select: none; }
+tbody tr { cursor: pointer; }
+tbody tr:hover, tbody tr.sel { background: var(--accent-soft); }
+.scroll { overflow-x: auto; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-primary); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.fiche-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 10px; }
+.fiche-kpi { border: 1px solid var(--grid); border-radius: 10px; padding: 10px 12px; }
+.fiche-kpi .v { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.fiche-kpi .n { color: var(--text-secondary); font-size: 12px; }
+details { margin-top: 8px; } summary { cursor: pointer; color: var(--text-secondary); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <h1>Nordline France – Sales &amp; Network Performance</h1>
+  <p class="sub">New-vehicle orders (PO), registrations, stock and dealer benchmark ·
+    KPIs on the rolling 12 months <span id="period"></span> ·
+    <b>Synthetic data</b> for a fictional brand, built for a portfolio project.</p>
+
+  <div class="filters">
+    <label for="region">Region</label>
+    <select id="region"></select>
+    <label for="channelNote" class="note" id="dealerCount"></label>
+  </div>
+
+  <div class="grid tiles" id="tiles"></div>
+
+  <div class="grid two">
+    <div class="card">
+      <h2>Orders vs registrations vs target, per month</h2>
+      <div class="legend" id="trendLegend"></div>
+      <div id="trend"></div>
+      <details><summary>Show data table</summary><div class="scroll" id="trendTable"></div></details>
+    </div>
+    <div class="card">
+      <h2>Registration mix by model and energy, rolling 12 months</h2>
+      <div class="legend" id="mixLegend"></div>
+      <div id="mix"></div>
+      <details><summary>Show data table</summary><div class="scroll" id="mixTable"></div></details>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="card">
+      <h2>Dealer benchmark: registrations vs target</h2>
+      <p class="note" style="margin:2px 0 6px">Quartiles are set on the whole network (Q1 = top 25 %).
+        Dashed line = network average.</p>
+      <div id="bench"></div>
+    </div>
+    <div class="card">
+      <h2>Fiche 360°: <span id="ficheName">select a dealer</span></h2>
+      <p class="note" style="margin:2px 0 0" id="ficheSub">Click a dealer in the table or the benchmark chart.</p>
+      <div class="fiche-grid" id="fiche"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h2>Dealer scorecard, rolling 12 months</h2>
+    <p class="note" style="margin:2px 0 8px">Click a column header to sort, a row to open its Fiche 360°.</p>
+    <div class="scroll" id="table"></div>
+  </div>
+
+  <div class="card">
+    <h2>Brand market share by segment, rolling 12 months</h2>
+    <div class="scroll" id="share"></div>
+  </div>
+  <div class="tip" id="tip"></div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const fmtInt = v => Math.round(v).toLocaleString("en-GB");
+const fmtPct = (v, d = 1) => (v * 100).toFixed(d) + " %";
+const fmtEur = v => "€" + (v >= 1e6 ? (v / 1e6).toFixed(1) + " M" : Math.round(v).toLocaleString("en-GB"));
+const css = n => getComputedStyle(document.querySelector(".viz-root")).getPropertyValue(n).trim();
+const SVGNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const tip = $("tip");
+function showTip(evt, title, rows) {
+  tip.innerHTML = `<b>${title}</b>` + rows.map(([k, v, c]) =>
+    `<div class="row"><span>${c ? `<i class="dot" style="background:${c}"></i> ` : ""}${k}</span><span>${v}</span></div>`).join("");
+  tip.style.display = "block";
+  const x = Math.min(evt.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+  tip.style.left = x + "px"; tip.style.top = (evt.clientY + 14) + "px";
+}
+const hideTip = () => tip.style.display = "none";
+function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / p * 2) / 2 * p; }
+
+// ---------- data prep ----------
+const C = DATA.monthly_cols, idx = Object.fromEntries(C.map((c, i) => [c, i]));
+const dealers = Object.fromEntries(DATA.dealers.map(d => [d.dealer_id, d]));
+const score = Object.fromEntries(DATA.scorecard.map(s => [s.dealer_id, s]));
+const months = [...new Set(DATA.monthly.map(r => r[idx.month]))].sort();
+const P0 = DATA.period.start, P1 = DATA.period.end;
+$("period").textContent = `(${P0.slice(0, 7)} to ${P1.slice(0, 7)})`;
+const regions = ["All regions", ...[...new Set(DATA.dealers.map(d => d.region))].sort()];
+$("region").innerHTML = regions.map(r => `<option>${r}</option>`).join("");
+
+const QUART = {
+  Q1: { label: "Q1 Outperforming", color: () => css("--good") },
+  Q2: { label: "Q2 In line", color: () => css("--text-secondary") },
+  Q3: { label: "Q3 In line", color: () => css("--text-secondary") },
+  Q4: { label: "Q4 Underperforming", color: () => css("--critical") },
+};
+let selectedDealer = null;
+
+function inScope(dealerId, region) {
+  return region === "All regions" || dealers[dealerId].region === region;
+}
+function aggregate(region) {
+  const byMonth = {}, tot = { orders: 0, value: 0, reg: 0, tgt: 0, regOk: 0, canc: 0, lead: 0,
+    disc: 0, margin: 0, bev: 0, stockEnd: 0, regs3m: 0 };
+  for (const r of DATA.monthly) {
+    if (!inScope(r[idx.dealer_id], region)) continue;
+    const m = r[idx.month];
+    const b = byMonth[m] ??= { orders: 0, reg: 0, tgt: 0 };
+    b.orders += r[idx.orders]; b.reg += r[idx.registrations]; b.tgt += r[idx.target_registrations];
+    if (m >= P0 && m <= P1) {
+      tot.orders += r[idx.orders]; tot.value += r[idx.order_value_eur]; tot.reg += r[idx.registrations];
+      tot.tgt += r[idx.target_registrations]; tot.regOk += r[idx.orders_registered];
+      tot.canc += r[idx.orders_cancelled]; tot.lead += r[idx.lead_days_sum];
+      tot.disc += r[idx.discount_sum]; tot.margin += r[idx.margin_sum]; tot.bev += r[idx.bev_orders];
+      if (m >= "2026-07-01") tot.regs3m += r[idx.registrations];
+      if (m === P1.slice(0, 8) + "01") tot.stockEnd += r[idx.stock_units];
+    }
+  }
+  return { byMonth, tot };
+}
+
+// ---------- KPI tiles ----------
+function renderTiles(t) {
+  const tiles = [
+    ["Orders (PO)", fmtInt(t.orders), fmtEur(t.value) + " net value"],
+    ["Registrations", fmtInt(t.reg), "target " + fmtInt(t.tgt)],
+    ["Target achievement", fmtPct(t.reg / t.tgt), "registrations / target"],
+    ["PO → registration", fmtPct(t.regOk / (t.regOk + t.canc)), "on closed orders"],
+    ["Avg lead time", (t.lead / t.reg).toFixed(1) + " d", "order to registration"],
+    ["Stock coverage", (t.stockEnd / (t.regs3m / 92)).toFixed(0) + " d", fmtInt(t.stockEnd) + " units at period end"],
+    ["Avg discount", fmtPct(t.disc / t.orders), "€" + fmtInt(t.margin / t.orders) + " margin / unit"],
+    ["BEV share", fmtPct(t.bev / t.orders, 0), "of orders"],
+  ];
+  $("tiles").innerHTML = tiles.map(([l, v, c]) =>
+    `<div class="card tile"><div class="label">${l}</div><div class="value">${v}</div><div class="ctx">${c}</div></div>`).join("");
+}
+
+// ---------- line chart: orders / registrations / target ----------
+function renderTrend(byMonth) {
+  const series = [
+    { key: "orders", name: "Orders (PO)", color: css("--series-1") },
+    { key: "reg", name: "Registrations", color: css("--series-2") },
+    { key: "tgt", name: "Target", color: css("--series-3"), dash: "5 4" },
+  ];
+  $("trendLegend").innerHTML = series.map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join("");
+  const host = $("trend"); host.innerHTML = "";
+  const W = Math.max(host.clientWidth, 360), H = 260, m = { t: 12, r: 96, b: 28, l: 44 };
+  const svg = el("svg", { width: W, height: H, role: "img",
+    "aria-label": "Monthly orders, registrations and target" }, host);
+  const xs = i => m.l + i * (W - m.l - m.r) / (months.length - 1);
+  const ymax = niceMax(Math.max(...months.flatMap(mo => series.map(s => byMonth[mo][s.key]))));
+  const ys = v => H - m.b - v / ymax * (H - m.t - m.b);
+  for (let i = 0; i <= 4; i++) {
+    const v = ymax * i / 4;
+    el("line", { x1: m.l, x2: W - m.r, y1: ys(v), y2: ys(v), class: i ? "gridline" : "axis-line" }, svg);
+    el("text", { x: m.l - 6, y: ys(v) + 4, "text-anchor": "end" }, svg).textContent = fmtInt(v);
+  }
+  months.forEach((mo, i) => {
+    if (i % 3 === 0) el("text", { x: xs(i), y: H - 8, "text-anchor": "middle" }, svg).textContent = mo.slice(0, 7);
+  });
+  for (const s of series) {
+    const d = months.map((mo, i) => `${i ? "L" : "M"}${xs(i)},${ys(byMonth[mo][s.key])}`).join("");
+    el("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-dasharray": s.dash || "none",
+      "stroke-linejoin": "round" }, svg);
+  }
+  // end-of-line labels, pushed apart so they never overlap
+  const last = months.length - 1;
+  const labels = series.map(s => ({ s, y: ys(byMonth[months[last]][s.key]) + 4 })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < labels.length; i++) labels[i].y = Math.max(labels[i].y, labels[i - 1].y + 13);
+  for (const { s, y } of labels) {
+    const lbl = el("text", { x: xs(last) + 8, y }, svg);
+    lbl.textContent = s.name.replace(" (PO)", ""); lbl.style.fill = css("--text-primary");
+  }
+  // crosshair + tooltip
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: css("--text-secondary"), "stroke-width": 1, opacity: 0 }, svg);
+  const dots = series.map(s => el("circle", { r: 4, fill: s.color, stroke: css("--surface-1"), "stroke-width": 2, opacity: 0 }, svg));
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("mousemove", e => {
+    const r = svg.getBoundingClientRect();
+    const i = Math.max(0, Math.min(months.length - 1, Math.round((e.clientX - r.left - m.l) / (W - m.l - m.r) * (months.length - 1))));
+    const mo = months[i];
+    cross.setAttribute("x1", xs(i)); cross.setAttribute("x2", xs(i)); cross.setAttribute("opacity", .5);
+    series.forEach((s, k) => { dots[k].setAttribute("cx", xs(i)); dots[k].setAttribute("cy", ys(byMonth[mo][s.key])); dots[k].setAttribute("opacity", 1); });
+    showTip(e, mo.slice(0, 7), series.map(s => [s.name, fmtInt(byMonth[mo][s.key]), s.color])
+      .concat([["Achievement", fmtPct(byMonth[mo].reg / byMonth[mo].tgt)]]));
+  });
+  hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("opacity", 0); dots.forEach(d => d.setAttribute("opacity", 0)); });
+  $("trendTable").innerHTML = "<table><thead><tr><th>Month</th><th></th><th>Orders</th><th>Registrations</th><th>Target</th></tr></thead><tbody>" +
+    months.map(mo => `<tr><td>${mo.slice(0, 7)}</td><td></td><td>${fmtInt(byMonth[mo].orders)}</td><td>${fmtInt(byMonth[mo].reg)}</td><td>${fmtInt(byMonth[mo].tgt)}</td></tr>`).join("") + "</tbody></table>";
+}
+
+// ---------- stacked bars: model x energy ----------
+function renderMix(region) {
+  const energies = [["BEV", css("--series-1")], ["PHEV", css("--series-2")], ["HEV", css("--series-3")]];
+  $("mixLegend").innerHTML = energies.map(([e, c]) => `<span><i style="background:${c}"></i>${e}</span>`).join("");
+  const agg = {};
+  for (const [kind, dealer, model, energy, n] of DATA.mix) {
+    if (kind !== "mix" || !inScope(dealer, region)) continue;
+    (agg[model] ??= { total: 0 })[energy] = (agg[model][energy] || 0) + n;
+    agg[model].total += n;
+  }
+  const models = Object.keys(agg).sort((a, b) => agg[b].total - agg[a].total);
+  const host = $("mix"); host.innerHTML = "";
+  const W = Math.max(host.clientWidth, 360), rowH = 34, m = { t: 6, r: 64, b: 24, l: 64 };
+  const H = m.t + m.b + models.length * rowH;
+  const svg = el("svg", { width: W, height: H, role: "img", "aria-label": "Registration mix by model and energy" }, host);
+  const xmax = niceMax(Math.max(...models.map(k => agg[k].total)));
+  const xs = v => m.l + v / xmax * (W - m.l - m.r);
+  for (let i = 0; i <= 4; i++) {
+    const v = xmax * i / 4;
+    el("line", { x1: xs(v), x2: xs(v), y1: m.t, y2: H - m.b, class: i ? "gridline" : "axis-line" }, svg);
+    el("text", { x: xs(v), y: H - 6, "text-anchor": "middle" }, svg).textContent = fmtInt(v);
+  }
+  models.forEach((mod, i) => {
+    const y = m.t + i * rowH + 6, h = rowH - 12;
+    el("text", { x: m.l - 8, y: y + h / 2 + 4, "text-anchor": "end" }, svg).textContent = mod;
+    let x0 = 0;
+    for (const [e, c] of energies) {
+      const v = agg[mod][e] || 0; if (!v) continue;
+      const w = Math.max(xs(x0 + v) - xs(x0) - 2, 1);
+      const r = el("rect", { x: xs(x0) + (x0 ? 2 : 0), y, width: w, height: h, fill: c, rx: 3 }, svg);
+      r.addEventListener("mousemove", ev => showTip(ev, `${mod} · ${e}`,
+        [["Registrations", fmtInt(v)], ["Share of model", fmtPct(v / agg[mod].total, 0)]]));
+      r.addEventListener("mouseleave", hideTip);
+      x0 += v;
+    }
+    const t = el("text", { x: xs(agg[mod].total) + 6, y: y + h / 2 + 4 }, svg);
+    t.textContent = fmtInt(agg[mod].total); t.style.fill = css("--text-primary");
+  });
+  $("mixTable").innerHTML = "<table><thead><tr><th>Model</th><th></th>" + energies.map(([e]) => `<th>${e}</th>`).join("") + "<th>Total</th></tr></thead><tbody>" +
+    models.map(k => `<tr><td>${k}</td><td></td>${energies.map(([e]) => `<td>${fmtInt(agg[k][e] || 0)}</td>`).join("")}<td>${fmtInt(agg[k].total)}</td></tr>`).join("") + "</tbody></table>";
+}
+
+// ---------- dealer benchmark ----------
+const netAvg = DATA.scorecard.reduce((a, s) => a + s.target_achievement, 0) / DATA.scorecard.length;
+function renderBench(region) {
+  const rows = DATA.scorecard.filter(s => inScope(s.dealer_id, region))
+    .sort((a, b) => b.target_achievement - a.target_achievement);
+  const host = $("bench"); host.innerHTML = "";
+  const W = Math.max(host.clientWidth, 360), rowH = 20, m = { t: 6, r: 56, b: 24, l: 150 };
+  const H = m.t + m.b + rows.length * rowH;
+  const svg = el("svg", { width: W, height: H, role: "img", "aria-label": "Target achievement by dealer" }, host);
+  const lo = 0.6, hi = 1.3, xs = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  for (const v of [0.6, 0.8, 1.0, 1.2]) {
+    el("line", { x1: xs(v), x2: xs(v), y1: m.t, y2: H - m.b, class: "gridline" }, svg);
+    el("text", { x: xs(v), y: H - 6, "text-anchor": "middle" }, svg).textContent = fmtPct(v, 0);
+  }
+  el("line", { x1: xs(netAvg), x2: xs(netAvg), y1: m.t, y2: H - m.b, stroke: css("--text-primary"),
+    "stroke-dasharray": "4 3", "stroke-width": 1 }, svg);
+  rows.forEach((s, i) => {
+    const y = m.t + i * rowH + 3, h = rowH - 6, q = QUART[s.quartile];
+    const name = el("text", { x: m.l - 8, y: y + h / 2 + 4, "text-anchor": "end" }, svg);
+    name.textContent = s.dealer_name.replace("Nordline ", "");
+    if (s.dealer_id === selectedDealer) name.style.fill = css("--text-primary");
+    const bar = el("rect", { x: xs(lo), y, width: Math.max(xs(s.target_achievement) - xs(lo), 1), height: h, rx: 3,
+      fill: s.dealer_id === selectedDealer ? css("--series-2") : css("--series-1") }, svg);
+    const qd = el("circle", { cx: xs(s.target_achievement) + 10, cy: y + h / 2, r: 4, fill: q.color() }, svg);
+    const ql = el("text", { x: xs(s.target_achievement) + 18, y: y + h / 2 + 4 }, svg); ql.textContent = s.quartile;
+    for (const n of [bar, qd]) {
+      n.style.cursor = "pointer";
+      n.addEventListener("mousemove", e => showTip(e, s.dealer_name, [["Achievement", fmtPct(s.target_achievement)],
+        ["vs network avg", (s.target_achievement - netAvg >= 0 ? "+" : "") + ((s.target_achievement - netAvg) * 100).toFixed(1) + " pts"],
+        ["Quartile", q.label]]));
+      n.addEventListener("mouseleave", hideTip);
+      n.addEventListener("click", () => selectDealer(s.dealer_id));
+    }
+  });
+}
+
+// ---------- scorecard table ----------
+const COLS = [
+  ["dealer_name", "Dealer", v => v.replace("Nordline ", "")],
+  ["region", "Region", v => v],
+  ["quartile", "Quartile", v => `<span class="badge"><i class="dot" style="background:${QUART[v].color()}"></i>${QUART[v].label}</span>`],
+  ["orders", "Orders", fmtInt],
+  ["registrations", "Regs", fmtInt],
+  ["target_achievement", "vs target", v => fmtPct(v)],
+  ["po_to_reg_conversion", "PO→reg", v => fmtPct(v)],
+  ["avg_lead_time_days", "Lead time (d)", v => v.toFixed(1)],
+  ["stock_days", "Stock (d)", v => v.toFixed(0)],
+  ["avg_discount_pct", "Discount", v => fmtPct(v)],
+  ["avg_margin_per_unit_eur", "Margin/unit", v => "€" + fmtInt(v)],
+];
+let sortKey = "target_achievement", sortDir = -1;
+function renderTable(region) {
+  const rows = DATA.scorecard.filter(s => inScope(s.dealer_id, region))
+    .sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1) * sortDir);
+  $("dealerCount").textContent = `${rows.length} dealers`;
+  $("table").innerHTML = "<table><thead><tr>" + COLS.map(([k, l]) => `<th data-k="${k}">${l}${k === sortKey ? (sortDir > 0 ? " ▲" : " ▼") : ""}</th>`).join("") +
+    "</tr></thead><tbody>" + rows.map(s => `<tr data-id="${s.dealer_id}" class="${s.dealer_id === selectedDealer ? "sel" : ""}">` +
+      COLS.map(([k, , f]) => `<td>${f(s[k])}</td>`).join("") + "</tr>").join("") + "</tbody></table>";
+  $("table").querySelectorAll("th").forEach(th => th.onclick = () => {
+    const k = th.dataset.k; sortDir = k === sortKey ? -sortDir : -1; sortKey = k; renderTable(region);
+  });
+  $("table").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => selectDealer(tr.dataset.id));
+}
+
+// ---------- fiche 360 ----------
+const FICHE = [
+  ["orders", "Orders (PO)", fmtInt, 1], ["order_value_eur", "Order value", fmtEur, 1],
+  ["registrations", "Registrations", fmtInt, 1], ["target_achievement", "Target achievement", v => fmtPct(v), 1],
+  ["po_to_reg_conversion", "PO → registration", v => fmtPct(v), 1], ["avg_lead_time_days", "Lead time", v => v.toFixed(1) + " d", -1],
+  ["stock_days", "Stock coverage", v => v.toFixed(0) + " d", -1], ["avg_discount_pct", "Avg discount", v => fmtPct(v), -1],
+  ["avg_margin_per_unit_eur", "Margin / unit", v => "€" + fmtInt(v), 1], ["bev_share_orders", "BEV share", v => fmtPct(v, 0), 1],
+  ["fleet_share_orders", "Fleet share", v => fmtPct(v, 0), 0],
+];
+function kpiQuartile(key, val, dir) {
+  if (!dir) return null;
+  const vals = DATA.scorecard.map(s => s[key]).sort((a, b) => (b - a) * dir);
+  const rank = vals.findIndex(v => (dir > 0 ? v <= val : v >= val));
+  return "Q" + Math.min(4, Math.floor(rank / vals.length * 4) + 1);
+}
+function selectDealer(id) {
+  selectedDealer = id; const s = score[id], d = dealers[id];
+  $("ficheName").textContent = d.dealer_name;
+  $("ficheSub").innerHTML = `${d.city}, ${d.region} · size ${d.size_class} · overall ${QUART[s.quartile].label}`;
+  $("fiche").innerHTML = FICHE.map(([k, l, f, dir]) => {
+    const avg = DATA.scorecard.reduce((a, x) => a + x[k], 0) / DATA.scorecard.length;
+    const q = kpiQuartile(k, s[k], dir);
+    const qHtml = q ? `<span class="badge"><i class="dot" style="background:${QUART[q].color()}"></i>${q}</span>` : "";
+    return `<div class="fiche-kpi"><div class="n">${l}</div><div class="v">${f(s[k])}</div>
+      <div class="n">network avg ${f(avg)} ${qHtml}</div></div>`;
+  }).join("");
+  render();
+}
+
+// ---------- market share ----------
+function renderShare() {
+  const agg = {};
+  for (const r of DATA.market_share) {
+    if (r.month < P0 || r.month > P1) continue;
+    const a = agg[r.segment] ??= { brand: 0, market: 0 };
+    a.brand += r.brand_registrations; a.market += r.market_registrations;
+  }
+  $("share").innerHTML = "<table><thead><tr><th>Segment</th><th></th><th>Brand registrations</th><th>Market registrations</th><th>Market share</th></tr></thead><tbody>" +
+    Object.entries(agg).sort((a, b) => b[1].brand / b[1].market - a[1].brand / a[1].market)
+      .map(([s, a]) => `<tr><td>${s}</td><td></td><td>${fmtInt(a.brand)}</td><td>${fmtInt(a.market)}</td><td>${fmtPct(a.brand / a.market, 2)}</td></tr>`).join("") +
+    "</tbody></table>";
+}
+
+// ---------- render ----------
+function render() {
+  const region = $("region").value;
+  const { byMonth, tot } = aggregate(region);
+  renderTiles(tot); renderTrend(byMonth); renderMix(region); renderBench(region); renderTable(region);
+}
+$("region").onchange = render;
+window.addEventListener("resize", render);
+renderShare();
+selectDealer(DATA.scorecard.slice().sort((a, b) => a.target_achievement - b.target_achievement)[0].dealer_id);
+</script>
+</body>
+</html>

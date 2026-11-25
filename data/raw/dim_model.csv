@@ -1,0 +1,6 @@
+model_id,model,segment,body,base_price_eur,import_lead_days
+M01,Aster,B-SUV,SUV,28900,38
+M02,Lumen,C-Hatch,Hatchback,31900,42
+M03,Orion,C-SUV,SUV,38900,46
+M04,Vega,D-Sedan,Sedan,46900,55
+M05,Atlas,LCV,Van,41900,60

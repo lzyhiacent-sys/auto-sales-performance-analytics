@@ -1,0 +1,18 @@
+dealer_id,dealer_name,region,alert,target_achievement,stock_days,po_to_reg_conversion,avg_discount_pct
+D026,Nordline Amiens,Hauts-de-France,Registrations below 85% of target,0.652,57.9,0.877,0.0815
+D032,Nordline Reims,Grand Est,Registrations below 85% of target,0.8,75.9,0.956,0.052
+D023,Nordline Limoges,Nouvelle-Aquitaine,Registrations below 85% of target,0.815,46.0,0.907,0.0648
+D022,Nordline Bayonne,Nouvelle-Aquitaine,Registrations below 85% of target,0.836,34.5,0.878,0.034
+D025,Nordline Lille,Hauts-de-France,Registrations below 85% of target,0.843,43.7,0.942,0.0571
+D033,Nordline Nantes,Ouest,Registrations below 85% of target,0.847,71.1,0.918,0.0528
+D007,Nordline Saint-Denis,Ile-de-France,PO to registration conversion below 90%,0.851,57.8,0.86,0.0625
+D035,Nordline Angers,Ouest,Stock coverage above 75 days,0.86,76.7,0.896,0.0499
+D021,Nordline Bordeaux,Nouvelle-Aquitaine,PO to registration conversion below 90%,0.942,32.9,0.894,0.0579
+D011,Nordline Clermont-Ferrand,Auvergne-Rhone-Alpes,PO to registration conversion below 90%,0.973,43.2,0.889,0.067
+D013,Nordline Marseille,Provence-Alpes-Cote d'Azur,PO to registration conversion below 90%,0.976,38.7,0.878,0.0581
+D017,Nordline Toulouse,Occitanie,PO to registration conversion below 90%,1.0,30.7,0.848,0.0741
+D037,Nordline Le Mans,Ouest,PO to registration conversion below 90%,1.003,29.4,0.859,0.0472
+D024,Nordline La Rochelle,Nouvelle-Aquitaine,PO to registration conversion below 90%,1.036,26.7,0.899,0.0592
+D031,Nordline Nancy,Grand Est,Average discount above 7.5%,1.052,35.4,0.92,0.0756
+D020,Nordline Perpignan,Occitanie,PO to registration conversion below 90%,1.055,36.9,0.895,0.052
+D030,Nordline Metz,Grand Est,PO to registration conversion below 90%,1.125,25.2,0.884,0.0587

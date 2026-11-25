@@ -1,0 +1,38 @@
+dealer_id,dealer_name,region,size_class,orders,order_value_eur,registrations,target_registrations,target_achievement,po_to_reg_conversion,avg_lead_time_days,stock_units,stock_days,avg_discount_pct,avg_margin_per_unit_eur,bev_share_orders,fleet_share_orders
+D001,Nordline Paris Est,Ile-de-France,L,587,22081042.0,531,472,1.125,0.903,30.6,43,31.1,0.0376,3413.0,0.601,0.37
+D002,Nordline Paris Ouest,Ile-de-France,L,583,21755163.0,513,523,0.981,0.901,50.8,42,28.2,0.0629,2860.0,0.595,0.295
+D003,Nordline Versailles,Ile-de-France,M,389,14780477.0,352,335,1.051,0.909,46.8,42,36.1,0.043,3338.0,0.576,0.38
+D004,Nordline Creteil,Ile-de-France,L,577,21658251.0,525,501,1.048,0.912,51.9,38,28.7,0.0524,3102.0,0.593,0.338
+D005,Nordline Cergy,Ile-de-France,L,492,18437822.0,442,438,1.009,0.928,47.6,52,43.9,0.0624,2903.0,0.575,0.358
+D006,Nordline Evry,Ile-de-France,M,352,12740525.0,317,347,0.914,0.916,48.7,38,38.8,0.0706,2631.0,0.548,0.324
+D007,Nordline Saint-Denis,Ile-de-France,S,182,6751111.0,149,175,0.851,0.86,48.5,27,57.8,0.0625,2869.0,0.593,0.368
+D008,Nordline Lyon Nord,Auvergne-Rhone-Alpes,L,581,21444413.0,564,525,1.074,0.924,50.4,57,33.6,0.059,2901.0,0.583,0.353
+D009,Nordline Lyon Sud,Auvergne-Rhone-Alpes,S,147,5430455.0,134,151,0.887,0.906,36.1,18,57.1,0.0528,3012.0,0.599,0.361
+D010,Nordline Grenoble,Auvergne-Rhone-Alpes,M,295,10872434.0,278,311,0.894,0.928,40.3,42,52.9,0.0629,2835.0,0.614,0.264
+D011,Nordline Clermont-Ferrand,Auvergne-Rhone-Alpes,M,356,13129526.0,319,328,0.973,0.889,50.5,38,43.2,0.067,2760.0,0.638,0.348
+D012,Nordline Annecy,Auvergne-Rhone-Alpes,S,199,7695424.0,193,173,1.116,0.935,34.7,22,38.2,0.0397,3472.0,0.568,0.372
+D013,Nordline Marseille,Provence-Alpes-Cote d'Azur,S,197,7424966.0,162,166,0.976,0.878,40.6,16,38.7,0.0581,2998.0,0.629,0.391
+D014,Nordline Nice,Provence-Alpes-Cote d'Azur,M,325,12375122.0,302,295,1.024,0.952,41.7,43,48.8,0.0484,3237.0,0.612,0.354
+D015,Nordline Toulon,Provence-Alpes-Cote d'Azur,M,307,11313487.0,276,301,0.917,0.903,44.8,27,38.8,0.0585,2923.0,0.619,0.303
+D016,Nordline Aix-en-Provence,Provence-Alpes-Cote d'Azur,M,292,11072565.0,261,294,0.888,0.906,33.1,28,40.3,0.0338,3496.0,0.606,0.342
+D017,Nordline Toulouse,Occitanie,S,247,8961647.0,203,203,1.0,0.848,42.0,15,30.7,0.0741,2574.0,0.583,0.356
+D018,Nordline Montpellier,Occitanie,L,477,18064262.0,451,513,0.879,0.929,38.2,58,47.6,0.0531,3111.0,0.623,0.405
+D019,Nordline Nimes,Occitanie,M,316,12091935.0,284,277,1.025,0.905,40.5,29,45.2,0.0324,3583.0,0.589,0.329
+D020,Nordline Perpignan,Occitanie,L,607,22972138.0,541,513,1.055,0.895,56.8,61,36.9,0.052,3135.0,0.608,0.353
+D021,Nordline Bordeaux,Nouvelle-Aquitaine,S,196,7126677.0,163,173,0.942,0.894,48.8,15,32.9,0.0579,2910.0,0.541,0.321
+D022,Nordline Bayonne,Nouvelle-Aquitaine,S,174,6820007.0,153,183,0.836,0.878,44.3,15,34.5,0.034,3616.0,0.678,0.356
+D023,Nordline Limoges,Nouvelle-Aquitaine,M,226,8509922.0,211,259,0.815,0.907,48.6,26,46.0,0.0648,2859.0,0.593,0.332
+D024,Nordline La Rochelle,Nouvelle-Aquitaine,M,364,13460251.0,314,303,1.036,0.899,29.5,25,26.7,0.0592,2911.0,0.582,0.354
+D025,Nordline Lille,Hauts-de-France,M,283,10625047.0,258,306,0.843,0.942,50.7,28,43.7,0.0571,3002.0,0.65,0.343
+D026,Nordline Amiens,Hauts-de-France,S,130,4690133.0,118,181,0.652,0.877,44.6,17,57.9,0.0815,2398.0,0.569,0.338
+D027,Nordline Valenciennes,Hauts-de-France,L,456,17238614.0,431,425,1.014,0.946,37.8,29,26.2,0.0435,3307.0,0.583,0.338
+D028,Nordline Dunkerque,Hauts-de-France,M,386,14314414.0,359,335,1.072,0.928,50.4,40,44.3,0.0582,2959.0,0.575,0.329
+D029,Nordline Strasbourg,Grand Est,M,292,11367423.0,266,282,0.943,0.946,41.9,21,29.3,0.0362,3577.0,0.644,0.336
+D030,Nordline Metz,Grand Est,L,673,25160134.0,605,538,1.125,0.884,44.0,38,25.2,0.0587,2967.0,0.621,0.339
+D031,Nordline Nancy,Grand Est,M,370,13425098.0,345,328,1.052,0.92,48.4,35,35.4,0.0756,2527.0,0.576,0.316
+D032,Nordline Reims,Grand Est,S,155,5910521.0,160,200,0.8,0.956,57.1,33,75.9,0.052,3182.0,0.632,0.381
+D033,Nordline Nantes,Ouest,S,170,6358258.0,155,183,0.847,0.918,47.4,34,71.1,0.0528,3088.0,0.635,0.394
+D034,Nordline Rennes,Ouest,M,319,11679955.0,285,271,1.052,0.922,44.3,33,38.4,0.0649,2779.0,0.536,0.367
+D035,Nordline Angers,Ouest,S,174,6492195.0,154,179,0.86,0.896,38.0,35,76.7,0.0499,3131.0,0.644,0.362
+D036,Nordline Brest,Ouest,M,357,13481643.0,320,326,0.982,0.96,47.1,31,38.5,0.0488,3201.0,0.625,0.375
+D037,Nordline Le Mans,Ouest,M,357,13515862.0,304,303,1.003,0.859,43.1,24,29.4,0.0472,3261.0,0.571,0.381

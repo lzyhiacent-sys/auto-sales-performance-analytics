@@ -1,0 +1,38 @@
+dealer_id,dealer_name,region,target_achievement,network_avg_achievement,gap_vs_network,quartile,classification
+D001,Nordline Paris Est,Ile-de-France,1.125,0.961,0.164,Q1,Outperforming
+D030,Nordline Metz,Grand Est,1.125,0.961,0.164,Q1,Outperforming
+D012,Nordline Annecy,Auvergne-Rhone-Alpes,1.116,0.961,0.155,Q1,Outperforming
+D008,Nordline Lyon Nord,Auvergne-Rhone-Alpes,1.074,0.961,0.113,Q1,Outperforming
+D028,Nordline Dunkerque,Hauts-de-France,1.072,0.961,0.111,Q1,Outperforming
+D020,Nordline Perpignan,Occitanie,1.055,0.961,0.094,Q1,Outperforming
+D031,Nordline Nancy,Grand Est,1.052,0.961,0.091,Q1,Outperforming
+D034,Nordline Rennes,Ouest,1.052,0.961,0.091,Q1,Outperforming
+D003,Nordline Versailles,Ile-de-France,1.051,0.961,0.09,Q1,Outperforming
+D004,Nordline Creteil,Ile-de-France,1.048,0.961,0.087,Q1,Outperforming
+D024,Nordline La Rochelle,Nouvelle-Aquitaine,1.036,0.961,0.075,Q2,In line
+D019,Nordline Nimes,Occitanie,1.025,0.961,0.064,Q2,In line
+D014,Nordline Nice,Provence-Alpes-Cote d'Azur,1.024,0.961,0.063,Q2,In line
+D027,Nordline Valenciennes,Hauts-de-France,1.014,0.961,0.053,Q2,In line
+D005,Nordline Cergy,Ile-de-France,1.009,0.961,0.048,Q2,In line
+D037,Nordline Le Mans,Ouest,1.003,0.961,0.042,Q2,In line
+D017,Nordline Toulouse,Occitanie,1.0,0.961,0.039,Q2,In line
+D036,Nordline Brest,Ouest,0.982,0.961,0.021,Q2,In line
+D002,Nordline Paris Ouest,Ile-de-France,0.981,0.961,0.02,Q2,In line
+D013,Nordline Marseille,Provence-Alpes-Cote d'Azur,0.976,0.961,0.015,Q3,In line
+D011,Nordline Clermont-Ferrand,Auvergne-Rhone-Alpes,0.973,0.961,0.012,Q3,In line
+D029,Nordline Strasbourg,Grand Est,0.943,0.961,-0.018,Q3,In line
+D021,Nordline Bordeaux,Nouvelle-Aquitaine,0.942,0.961,-0.019,Q3,In line
+D015,Nordline Toulon,Provence-Alpes-Cote d'Azur,0.917,0.961,-0.044,Q3,In line
+D006,Nordline Evry,Ile-de-France,0.914,0.961,-0.047,Q3,In line
+D010,Nordline Grenoble,Auvergne-Rhone-Alpes,0.894,0.961,-0.067,Q3,In line
+D016,Nordline Aix-en-Provence,Provence-Alpes-Cote d'Azur,0.888,0.961,-0.073,Q3,In line
+D009,Nordline Lyon Sud,Auvergne-Rhone-Alpes,0.887,0.961,-0.074,Q3,In line
+D018,Nordline Montpellier,Occitanie,0.879,0.961,-0.082,Q4,Underperforming
+D035,Nordline Angers,Ouest,0.86,0.961,-0.101,Q4,Underperforming
+D007,Nordline Saint-Denis,Ile-de-France,0.851,0.961,-0.11,Q4,Underperforming
+D033,Nordline Nantes,Ouest,0.847,0.961,-0.114,Q4,Underperforming
+D025,Nordline Lille,Hauts-de-France,0.843,0.961,-0.118,Q4,Underperforming
+D022,Nordline Bayonne,Nouvelle-Aquitaine,0.836,0.961,-0.125,Q4,Underperforming
+D023,Nordline Limoges,Nouvelle-Aquitaine,0.815,0.961,-0.146,Q4,Underperforming
+D032,Nordline Reims,Grand Est,0.8,0.961,-0.161,Q4,Underperforming
+D026,Nordline Amiens,Hauts-de-France,0.652,0.961,-0.309,Q4,Underperforming

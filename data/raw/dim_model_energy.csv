@@ -1,0 +1,11 @@
+model_id,energy,powertrain
+M01,BEV,Electric
+M01,HEV,Hybrid
+M02,BEV,Electric
+M02,PHEV,Plug-in hybrid
+M03,BEV,Electric
+M03,PHEV,Plug-in hybrid
+M03,HEV,Hybrid
+M04,BEV,Electric
+M04,PHEV,Plug-in hybrid
+M05,BEV,Electric
